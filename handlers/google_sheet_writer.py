@@ -1,18 +1,13 @@
 import gspread
 import os
-from dotenv import load_dotenv
-from oauth2client.service_account import ServiceAccountCredentials
+import json
+from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-load_dotenv()
-
 def save_full_booking(user_id, username, order_type, cart_items, total_amount, booking_info=None):
-    scope = [
-        "https://spreadsheets.google.com/feeds",
-        "https://www.googleapis.com/auth/drive"
-    ]
-    key_path = os.getenv("GOOGLE_KEY_PATH")
-    creds = ServiceAccountCredentials.from_json_keyfile_name(key_path, scope)
+    creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+    creds_dict = json.loads(creds_json)
+    creds = Credentials.from_service_account_info(creds_dict)
     client = gspread.authorize(creds)
 
     sheet = client.open_by_url(
@@ -40,9 +35,9 @@ def save_full_booking(user_id, username, order_type, cart_items, total_amount, b
         row = [
             username or "Неизвестно",
             str(user_id),
-            "", "", "", "",  # пустые поля для бронирования
+            "", "", "", "",  # пустые поля
             order_type,
-            "",  # адрес отсутствует
+            "",  # адрес
             order_details,
             total_amount,
             now

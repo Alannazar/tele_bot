@@ -14,8 +14,8 @@ from handlers import payment
 from handlers.delivery_menu import router as delivery_router
 from handlers import reviews
 
-# Загружаем .env из другого пути
-load_dotenv(dotenv_path="C:/Users/ALAN/Desktop/key/.env")
+# Загружаем переменные из .env (если локально)
+load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
