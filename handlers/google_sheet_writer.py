@@ -7,7 +7,9 @@ from datetime import datetime
 def save_full_booking(user_id, username, order_type, cart_items, total_amount, booking_info=None):
     creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
     creds_dict = json.loads(creds_json)
-    creds = Credentials.from_service_account_info(creds_dict)
+    
+    scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
     client = gspread.authorize(creds)
 
     sheet = client.open_by_url(
